@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { format } from 'date-fns'
+import ReactMarkdown from 'react-markdown'
 import Input from '@/components/atoms/Input'
 import Button from '@/components/atoms/Button'
 import PrioritySelector from '@/components/molecules/PrioritySelector'
@@ -14,36 +15,44 @@ const TaskModal = ({
   task = null, 
   categories = [] 
 }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: '',
     priority: 'medium',
-    dueDate: ''
+    dueDate: '',
+    notes: ''
   })
   
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showNotesPreview, setShowNotesPreview] = useState(false)
+  const [notesExpanded, setNotesExpanded] = useState(false)
 
-  useEffect(() => {
+useEffect(() => {
     if (task) {
       setFormData({
         title: task.title || '',
         description: task.description || '',
         category: task.category || '',
         priority: task.priority || 'medium',
-        dueDate: task.dueDate ? format(new Date(task.dueDate), 'yyyy-MM-dd') : ''
+        dueDate: task.dueDate ? format(new Date(task.dueDate), 'yyyy-MM-dd') : '',
+        notes: task.notes || ''
       })
+      setNotesExpanded(Boolean(task.notes))
     } else {
       setFormData({
         title: '',
         description: '',
         category: categories[0]?.id || '',
         priority: 'medium',
-        dueDate: ''
+        dueDate: '',
+        notes: ''
       })
+      setNotesExpanded(false)
     }
     setErrors({})
+    setShowNotesPreview(false)
   }, [task, categories, isOpen])
 
   const validateForm = () => {
@@ -139,7 +148,7 @@ const TaskModal = ({
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto">
+<form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[calc(90vh-120px)] overflow-y-auto">
             <Input
               label="Task Title"
               type="text"
@@ -161,6 +170,94 @@ const TaskModal = ({
                 rows={4}
                 className="input-premium resize-none"
               />
+            </div>
+
+            {/* Notes Section */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-sm font-medium text-gray-700 flex items-center">
+                  <ApperIcon name="FileText" size={16} className="mr-2" />
+                  Notes (Markdown Supported)
+                </label>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  icon={notesExpanded ? "ChevronUp" : "ChevronDown"}
+                  onClick={() => setNotesExpanded(!notesExpanded)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  {notesExpanded ? 'Collapse' : 'Expand'}
+                </Button>
+              </div>
+              
+              <AnimatePresence>
+                {notesExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="space-y-3">
+                      {formData.notes && (
+                        <div className="flex items-center space-x-2 mb-2">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            icon="Edit"
+                            onClick={() => setShowNotesPreview(false)}
+                            className={`text-xs ${!showNotesPreview ? 'bg-primary-100 text-primary-700' : 'text-gray-500'}`}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            icon="Eye"
+                            onClick={() => setShowNotesPreview(true)}
+                            className={`text-xs ${showNotesPreview ? 'bg-primary-100 text-primary-700' : 'text-gray-500'}`}
+                          >
+                            Preview
+                          </Button>
+                        </div>
+                      )}
+                      
+                      {!showNotesPreview ? (
+                        <div>
+                          <textarea
+                            value={formData.notes}
+                            onChange={(e) => handleInputChange('notes', e.target.value)}
+                            placeholder="Add notes in markdown format..."
+                            rows={6}
+                            className="input-premium resize-none font-mono text-sm"
+                          />
+                          <div className="mt-2 text-xs text-gray-500 bg-white rounded p-2 border">
+                            <div className="font-medium mb-1">Markdown Quick Reference:</div>
+                            <div className="grid grid-cols-2 gap-2 text-xs">
+                              <div>**Bold** → <strong>Bold</strong></div>
+                              <div>*Italic* → <em>Italic</em></div>
+                              <div># Header → Header</div>
+                              <div>- List → • List</div>
+                              <div>`Code` → <code className="bg-gray-100 px-1 rounded">Code</code></div>
+                              <div>[Link](url) → Link</div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="bg-white border rounded-lg p-4 min-h-[8rem]">
+                          <ReactMarkdown className="prose prose-sm max-w-none">
+                            {formData.notes || '*No notes added yet*'}
+                          </ReactMarkdown>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <CategorySelector

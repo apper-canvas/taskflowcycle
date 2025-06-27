@@ -9,9 +9,10 @@ export const taskData = [
     completed: false,
     archived: false,
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    completedAt: null
+    completedAt: null,
+    notes: ''
   },
-  {
+{
     id: 2,
     title: 'Buy groceries',
     description: 'Get fresh vegetables, fruits, and pantry essentials for the week',
@@ -21,9 +22,10 @@ export const taskData = [
     completed: false,
     archived: false,
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    completedAt: null
+    completedAt: null,
+    notes: ''
   },
-  {
+{
     id: 3,
     title: 'Morning workout',
     description: '30-minute cardio session and strength training',
@@ -33,9 +35,10 @@ export const taskData = [
     completed: true,
     archived: false,
     createdAt: new Date().toISOString(),
-    completedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+    completedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    notes: ''
   },
-  {
+{
     id: 4,
     title: 'Learn React hooks',
     description: 'Study advanced React hooks patterns and implement custom hooks',
@@ -45,9 +48,10 @@ export const taskData = [
     completed: false,
     archived: false,
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    completedAt: null
+    completedAt: null,
+    notes: ''
   },
-  {
+{
     id: 5,
     title: 'Call mom',
     description: 'Weekly check-in call with family',
@@ -57,9 +61,10 @@ export const taskData = [
     completed: false,
     archived: false,
     createdAt: new Date().toISOString(),
-    completedAt: null
+    completedAt: null,
+    notes: ''
   },
-  {
+{
     id: 6,
     title: 'Fix kitchen faucet',
     description: 'Replace the leaky kitchen faucet with the new one purchased last week',
@@ -69,9 +74,10 @@ export const taskData = [
     completed: false,
     archived: false,
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    completedAt: null
+    completedAt: null,
+    notes: ''
   },
-  {
+{
     id: 7,
     title: 'Team meeting preparation',
     description: 'Prepare slides and agenda for the weekly team standup meeting',
@@ -81,9 +87,10 @@ export const taskData = [
     completed: true,
     archived: false,
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    completedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
+    completedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+    notes: ''
   },
-  {
+{
     id: 8,
     title: 'Read JavaScript book',
     description: 'Continue reading "You Don\'t Know JS" series - finish chapter 3',
@@ -93,6 +100,7 @@ export const taskData = [
     completed: false,
     archived: false,
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    completedAt: null
+    completedAt: null,
+    notes: ''
   }
 ]

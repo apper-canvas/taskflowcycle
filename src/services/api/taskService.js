@@ -22,7 +22,7 @@ class TaskService {
     return { ...task }
   }
 
-  async create(taskData) {
+async create(taskData) {
     await delay(400)
     
     const newTask = {
@@ -31,7 +31,8 @@ class TaskService {
       completed: false,
       archived: false,
       createdAt: new Date().toISOString(),
-      completedAt: null
+      completedAt: null,
+      notes: taskData.notes || ''
     }
     
     this.tasks.unshift(newTask)
