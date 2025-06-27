@@ -11,7 +11,10 @@ const TaskCard = ({
   onToggleComplete, 
   onEdit, 
   onDelete,
-  onArchive 
+  onArchive,
+  isSelected = false,
+  onSelect,
+  showSelection = false
 }) => {
   const getPriorityVariant = (priority) => {
     switch (priority) {
@@ -40,16 +43,29 @@ const TaskCard = ({
     onToggleComplete(task.id)
   }
 
-  return (
+return (
     <motion.div
       layout
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -100 }}
       whileHover={{ scale: 1.01 }}
-      className={`card-premium p-6 ${task.completed ? 'opacity-75 bg-gradient-to-r from-green-50 to-green-100' : ''}`}
+      className={`card-premium p-6 transition-all duration-200 ${
+        task.completed ? 'opacity-75 bg-gradient-to-r from-green-50 to-green-100' : ''
+      } ${
+        isSelected ? 'ring-2 ring-primary-500 bg-gradient-to-r from-primary-50 to-primary-100' : ''
+      }`}
     >
       <div className="flex items-start space-x-4">
+        {showSelection && (
+          <div className="flex-shrink-0 mt-1">
+            <Checkbox
+              checked={isSelected}
+              onChange={(checked) => onSelect(task.id, checked)}
+              size="md"
+            />
+          </div>
+        )}
         <div className="flex-shrink-0 mt-1">
           <Checkbox
             checked={task.completed}
