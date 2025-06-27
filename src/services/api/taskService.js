@@ -28,10 +28,11 @@ async create(taskData) {
     const newTask = {
       id: Math.max(...this.tasks.map(t => t.id), 0) + 1,
       ...taskData,
-      completed: false,
+      status: taskData.status || 'pending',
+      completed: taskData.status === 'completed' ? true : false,
       archived: false,
       createdAt: new Date().toISOString(),
-      completedAt: null,
+      completedAt: taskData.status === 'completed' ? new Date().toISOString() : null,
       notes: taskData.notes || ''
     }
     
@@ -39,7 +40,7 @@ async create(taskData) {
     return { ...newTask }
   }
 
-  async update(id, updates) {
+async update(id, updates) {
     await delay(300)
     
     const index = this.tasks.findIndex(task => task.id === parseInt(id))
@@ -47,11 +48,24 @@ async create(taskData) {
       throw new Error('Task not found')
     }
     
-    this.tasks[index] = {
-      ...this.tasks[index],
-      ...updates
+    // Handle status-completion synchronization
+    const updatedTask = { ...this.tasks[index], ...updates }
+    
+    if (updates.status === 'completed' && !updatedTask.completed) {
+      updatedTask.completed = true
+      updatedTask.completedAt = new Date().toISOString()
+    } else if (updates.status && updates.status !== 'completed' && updatedTask.completed) {
+      updatedTask.completed = false
+      updatedTask.completedAt = null
+    } else if (updates.completed === true && updatedTask.status !== 'completed') {
+      updatedTask.status = 'completed'
+      updatedTask.completedAt = new Date().toISOString()
+    } else if (updates.completed === false && updatedTask.status === 'completed') {
+      updatedTask.status = 'pending'
+      updatedTask.completedAt = null
     }
     
+    this.tasks[index] = updatedTask
     return { ...this.tasks[index] }
   }
 

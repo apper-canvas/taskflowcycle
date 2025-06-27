@@ -11,6 +11,19 @@ export const getPriorityColor = (priority) => {
   }
 }
 
+export const getStatusColor = (status) => {
+  switch (status?.toLowerCase()) {
+    case 'completed':
+      return 'text-green-600 bg-green-100'
+    case 'in-progress':
+      return 'text-orange-600 bg-orange-100'
+    case 'pending':
+      return 'text-gray-600 bg-gray-100'
+    default:
+      return 'text-gray-600 bg-gray-100'
+  }
+}
+
 export const getPriorityWeight = (priority) => {
   switch (priority?.toLowerCase()) {
     case 'high':
@@ -27,9 +40,11 @@ export const getPriorityWeight = (priority) => {
 export const filterTasksByStatus = (tasks, status) => {
   switch (status) {
     case 'completed':
-      return tasks.filter(task => task.completed && !task.archived)
+      return tasks.filter(task => (task.completed || task.status === 'completed') && !task.archived)
+    case 'in-progress':
+      return tasks.filter(task => task.status === 'in-progress' && !task.archived)
     case 'pending':
-      return tasks.filter(task => !task.completed && !task.archived)
+      return tasks.filter(task => (task.status === 'pending' || (!task.completed && !task.status)) && !task.archived)
     case 'archived':
       return tasks.filter(task => task.archived)
     case 'active':
@@ -82,12 +97,14 @@ export const sortTasks = (tasks, sortBy = 'priority') => {
 
 export const getTaskStats = (tasks) => {
   const activeTasks = tasks.filter(task => !task.archived)
-  const completedTasks = activeTasks.filter(task => task.completed)
-  const pendingTasks = activeTasks.filter(task => !task.completed)
+  const completedTasks = activeTasks.filter(task => task.completed || task.status === 'completed')
+  const inProgressTasks = activeTasks.filter(task => task.status === 'in-progress')
+  const pendingTasks = activeTasks.filter(task => task.status === 'pending' || (!task.completed && !task.status))
   
   return {
     total: activeTasks.length,
     completed: completedTasks.length,
+    inProgress: inProgressTasks.length,
     pending: pendingTasks.length,
     completionRate: activeTasks.length > 0 ? (completedTasks.length / activeTasks.length) * 100 : 0
   }

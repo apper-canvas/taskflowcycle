@@ -5,6 +5,7 @@ export const taskData = [
     description: 'Finish the Q4 project proposal and send it to the client for review',
     category: 'work',
     priority: 'high',
+    status: 'pending',
     dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Tomorrow
     completed: false,
     archived: false,
@@ -18,6 +19,7 @@ export const taskData = [
     description: 'Get fresh vegetables, fruits, and pantry essentials for the week',
     category: 'shopping',
     priority: 'medium',
+    status: 'in-progress',
     dueDate: new Date().toISOString(), // Today
     completed: false,
     archived: false,
@@ -31,6 +33,7 @@ export const taskData = [
     description: '30-minute cardio session and strength training',
     category: 'health',
     priority: 'high',
+    status: 'completed',
     dueDate: new Date().toISOString(), // Today
     completed: true,
     archived: false,
@@ -44,6 +47,7 @@ export const taskData = [
     description: 'Study advanced React hooks patterns and implement custom hooks',
     category: 'learning',
     priority: 'medium',
+    status: 'pending',
     dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // In 3 days
     completed: false,
     archived: false,
@@ -57,6 +61,7 @@ export const taskData = [
     description: 'Weekly check-in call with family',
     category: 'personal',
     priority: 'low',
+    status: 'pending',
     dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // In 2 days
     completed: false,
     archived: false,
@@ -70,6 +75,7 @@ export const taskData = [
     description: 'Replace the leaky kitchen faucet with the new one purchased last week',
     category: 'home',
     priority: 'medium',
+    status: 'in-progress',
     dueDate: null,
     completed: false,
     archived: false,
@@ -83,6 +89,7 @@ export const taskData = [
     description: 'Prepare slides and agenda for the weekly team standup meeting',
     category: 'work',
     priority: 'high',
+    status: 'completed',
     dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(), // Tomorrow
     completed: true,
     archived: false,
@@ -96,6 +103,7 @@ export const taskData = [
     description: 'Continue reading "You Don\'t Know JS" series - finish chapter 3',
     category: 'learning',
     priority: 'low',
+    status: 'pending',
     dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // Next week
     completed: false,
     archived: false,

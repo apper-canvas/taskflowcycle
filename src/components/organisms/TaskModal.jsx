@@ -20,6 +20,7 @@ const [formData, setFormData] = useState({
     description: '',
     category: '',
     priority: 'medium',
+    status: 'pending',
     dueDate: '',
     notes: ''
   })
@@ -36,16 +37,18 @@ useEffect(() => {
         description: task.description || '',
         category: task.category || '',
         priority: task.priority || 'medium',
+        status: task.status || 'pending',
         dueDate: task.dueDate ? format(new Date(task.dueDate), 'yyyy-MM-dd') : '',
         notes: task.notes || ''
       })
       setNotesExpanded(Boolean(task.notes))
-    } else {
+} else {
       setFormData({
         title: '',
         description: '',
         category: categories[0]?.id || '',
         priority: 'medium',
+        status: 'pending',
         dueDate: '',
         notes: ''
       })
@@ -272,10 +275,25 @@ useEffect(() => {
               </p>
             )}
 
-            <PrioritySelector
+<PrioritySelector
               value={formData.priority}
               onChange={(value) => handleInputChange('priority', value)}
             />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Status
+              </label>
+              <select
+                value={formData.status}
+                onChange={(e) => handleInputChange('status', e.target.value)}
+                className="input-premium"
+              >
+                <option value="pending">Pending</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
 
             <Input
               label="Due Date (Optional)"
