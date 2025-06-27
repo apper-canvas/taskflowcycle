@@ -6,6 +6,7 @@ import Header from '@/components/organisms/Header'
 import Sidebar from '@/components/organisms/Sidebar'
 import TaskList from '@/components/organisms/TaskList'
 import TaskModal from '@/components/organisms/TaskModal'
+import CategoryModal from '@/components/organisms/CategoryModal'
 import Loading from '@/components/ui/Loading'
 import Error from '@/components/ui/Error'
 import { taskService } from '@/services/api/taskService'
@@ -23,9 +24,11 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [searchTerm, setSearchTerm] = useState('')
+const [searchTerm, setSearchTerm] = useState('')
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState(null)
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
+  const [editingCategory, setEditingCategory] = useState(null)
 
   // Load initial data
   useEffect(() => {
@@ -191,6 +194,32 @@ const Dashboard = () => {
     } catch (err) {
       toast.error('Failed to save task. Please try again.')
       console.error('Error saving task:', err)
+}
+  }
+
+  const handleAddCategory = () => {
+    setEditingCategory(null)
+    setIsCategoryModalOpen(true)
+  }
+
+  const handleSaveCategory = async (categoryData) => {
+    try {
+      let savedCategory
+      
+      if (editingCategory) {
+        savedCategory = await categoryService.update(editingCategory.id, categoryData)
+        setCategories(prev => prev.map(category => 
+          category.id === editingCategory.id ? savedCategory : category
+        ))
+        toast.success('Category updated successfully!')
+      } else {
+        savedCategory = await categoryService.create(categoryData)
+        setCategories(prev => [savedCategory, ...prev])
+        toast.success('Category created successfully!')
+      }
+    } catch (err) {
+      toast.error('Failed to save category. Please try again.')
+      console.error('Error saving category:', err)
     }
   }
 
@@ -294,11 +323,12 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar
+<Sidebar
         categories={categories}
         taskCounts={taskCounts}
         onCategorySelect={handleCategorySelect}
         selectedCategory={selectedCategory}
+        onAddCategory={handleAddCategory}
       />
       
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -335,7 +365,17 @@ const Dashboard = () => {
         }}
         onSave={handleSaveTask}
         task={editingTask}
-        categories={categories}
+categories={categories}
+      />
+
+      <CategoryModal
+        isOpen={isCategoryModalOpen}
+        onClose={() => {
+          setIsCategoryModalOpen(false)
+          setEditingCategory(null)
+        }}
+        onSave={handleSaveCategory}
+        category={editingCategory}
       />
     </div>
   )

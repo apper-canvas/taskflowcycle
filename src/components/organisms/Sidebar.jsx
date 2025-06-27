@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import ApperIcon from '@/components/ApperIcon'
 import Badge from '@/components/atoms/Badge'
 
-const Sidebar = ({ categories, taskCounts, onCategorySelect, selectedCategory }) => {
+const Sidebar = ({ categories, taskCounts, onCategorySelect, selectedCategory, onAddCategory }) => {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -106,12 +106,22 @@ const Sidebar = ({ categories, taskCounts, onCategorySelect, selectedCategory })
           </div>
         </div>
 
-        {/* Categories */}
+{/* Categories */}
         <div>
-          <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
-            Categories
-          </h2>
-          
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
+              Categories
+            </h2>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={onAddCategory}
+              className="p-1.5 rounded-lg bg-primary-100 hover:bg-primary-200 border border-primary-200 transition-colors"
+              title="Add Category"
+            >
+              <ApperIcon name="Plus" size={14} className="text-primary-600" />
+            </motion.button>
+          </div>
           <div className="space-y-2">
             {categories.map((category, index) => (
               <motion.button
